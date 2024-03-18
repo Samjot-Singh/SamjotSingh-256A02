@@ -18,5 +18,10 @@
         "email": "user1@example.com",
         "password": "password1",
         "role": "c"
+    },
+    {
+        "email": "newuser@example.com",
+        "password": "password",
+        "role": "c"
     }
 ]

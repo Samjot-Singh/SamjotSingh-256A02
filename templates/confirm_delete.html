@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Delete</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Confirm Delete</h2>
+        <div class="alert alert-warning">Are you sure you want to delete this order?</div>
+        <form method="POST">
+            {{ form.csrf_token }}
+            <div class="form-group">
+                <label>Order Details:</label>
+                <p>Type: {{ order.type }}</p>
+                <p>Crust: {{ order.crust }}</p>
+                <p>Size: {{ order.size }}</p>
+                <p>Quantity: {{ order.quantity }}</p>
+                <p>Price Per: {{ order.price_per }}</p>
+                <p>Order Date: {{ order.order_date }}</p>
+            </div>
+            <button type="submit" class="btn btn-danger">Yes, Delete</button>
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">No, Cancel</a>
+        </form>
+    </div>
+</body>
+</html>

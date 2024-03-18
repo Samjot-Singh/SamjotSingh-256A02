@@ -1,52 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Order Pizza</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    </head>
-    <body>
-        <div class="container">
-            <h2>Pizza Orders</h2>
-            {% if 'email' in session %}
-                <a href="{{ url_for('logout') }}" class="link">Logout</a>
-                <table class="table">
-                    <thead>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Pizza</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Pizza Orders</h2>
+        {% if 'email' in session %}
+            <a href="{{ url_for('logout') }}" class="link">Logout</a>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Crust</th>
+                        <th>Size</th>
+                        <th>Quantity</th>
+                        <th>Price Per</th>
+                        <th>Order Date</th>
+                        <th>Subtotal</th>
+                        <th>Delivery Charge</th>
+                        <th>Total Cost</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in pizza_data %}
                         <tr>
-                            <th>Type</th>
-                            <th>Crust</th>
-                            <th>Size</th>
-                            <th>Quantity</th>
-                            <th>Price Per</th>
-                            <th>Order Date</th>
-                            <th>Subtotal</th>
-                            <th>Delivery Charge</th>
-                            <th>Total Cost</th>
+                            <td>{{ order.type }}</td>
+                            <td>{{ order.crust }}</td>
+                            <td>{{ order.size }}</td>
+                            <td>{{ order.quantity }}</td>
+                            <td>{{ order.price_per }}</td>
+                            <td>{{ order.order_date }}</td>
+                            <td>{{ order.quantity * order.price_per }}</td>
+                            <td>{{ (order.quantity * order.price_per) * 0.1 }}</td>
+                            <td>{{ (order.quantity * order.price_per) + ((order.quantity * order.price_per) * 0.1) }}</td>
+                            <td>
+                                <a href="{{ url_for('edit_order', order_id=order.id) }}">Edit</a>
+                                <a href="{{ url_for('confirm_delete', order_id=order.id) }}">Delete</a>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        {% for order in pizza_data %}
-                            <tr>
-                                <td>{{ order.type }}</td>
-                                <td>{{ order.crust }}</td>
-                                <td>{{ order.size }}</td>
-                                <td>{{ order.quantity }}</td>
-                                <td>{{ order.price_per }}</td>
-                                <td>{{ order.order_date }}</td>
-                                <td>{{ order.quantity * order.price_per }}</td>
-                                <td>{{ (order.quantity * order.price_per) * 0.1 }}</td>
-                                <td>{{ (order.quantity * order.price_per) + ((order.quantity * order.price_per) * 0.1) }}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                <a href="{{ url_for('pizza') }}" class="btn">Order Pizza</a>
-            {% else %}
-                <p class="alert alert-danger">Please login to view this page.</p>
-                <a href="{{ url_for('login') }}" class="link">Login</a>
-            {% endif %}
-        </div>
-    </body>
-    </html>
-    
+                    {% endfor %}
+                </tbody>
+            </table>
+            <a href="{{ url_for('pizza') }}" class="btn">Order Pizza</a>
+        {% else %}
+            <p class="alert alert-danger">Please login to view this page.</p>
+            <a href="{{ url_for('login') }}" class="link">Login</a>
+        {% endif %}
+    </div>
+</body>
+</html>
