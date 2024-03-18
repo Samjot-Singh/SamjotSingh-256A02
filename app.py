@@ -117,5 +117,12 @@ def pizza():
         return redirect(url_for('index'))
     return render_template('pizza.html', form=form)
 
+@app.route('/logout')
+def logout():
+    session.pop('email', None)
+    session.pop('role', None)
+    flash('You have been logged out successfully.', 'success')
+    return redirect(url_for('login'))
+
 if __name__ == '__main__':
     app.run(debug=True, port=8888)
