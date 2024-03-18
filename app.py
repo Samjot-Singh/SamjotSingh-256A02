@@ -16,6 +16,8 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, RadioField, SelectField, IntegerField, FloatField, DateField, SubmitField, HiddenField
 from wtforms.validators import DataRequired, Email, EqualTo, Length
 import json
+from datetime import datetime
+from jinja2.exceptions import UndefinedError
 
 app = Flask(__name__)
 app.secret_key = "Hello there "
@@ -38,7 +40,7 @@ class PizzaForm(FlaskForm):
     size = SelectField('Size', choices=[], validators=[DataRequired()])
     quantity = IntegerField('Quantity', validators=[DataRequired()])
     price_per = FloatField('Price per Pizza', validators=[DataRequired()])
-    order_date = DateField('Order Date', validators=[DataRequired()])
+    order_date = DateField('Order Date', validators=[DataRequired()], format='%Y-%m-%d')
     id = HiddenField()
     submit = SubmitField('Submit')
 
@@ -122,7 +124,7 @@ def pizza():
                 'size': form.size.data,
                 'quantity': form.quantity.data,
                 'price_per': form.price_per.data,
-                'order_date': form.order_date.data.strftime('%Y-%m-%d')
+                'order_date': datetime.strptime(form.order_date.data, '%Y-%m-%d').strftime('%Y-%m-%d')
             }
             pizza_data.append(pizza_order)
             write_pizza_data(pizza_data)
@@ -143,17 +145,26 @@ def confirm_delete(order_id):
     if 'email' not in session:
         flash('Please login to view this page.', 'danger')
         return redirect(url_for('login'))
-    
+
+    pizza_data = load_pizza_data()
+    order_to_delete = next((order for order in pizza_data if order['id'] == order_id), None)
+
+    if order_to_delete is None:
+        flash('Order not found.', 'danger')
+        return redirect(url_for('index'))
+
     if request.method == 'POST':
         pizza_data = load_pizza_data()
         updated_pizza_data = [order for order in pizza_data if order['id'] != order_id]
         write_pizza_data(updated_pizza_data)
         flash('Order deleted successfully!', 'success')
         return redirect(url_for('index'))
-    
-    pizza_data = load_pizza_data()
-    order_to_delete = [order for order in pizza_data if order['id'] == order_id][0]
-    return render_template('confirm_delete.html', order=order_to_delete)
+
+    try:
+        return render_template('confirm_delete.html', form=None, order=order_to_delete)
+    except UndefinedError:
+        return render_template('confirm_delete.html', order=order_to_delete)
+
 
 @app.route('/edit_order/<int:order_id>', methods=['GET', 'POST'])
 def edit_order(order_id):
@@ -181,7 +192,7 @@ def edit_order(order_id):
                     order['size'] = form.size.data
                     order['quantity'] = form.quantity.data
                     order['price_per'] = form.price_per.data
-                    order['order_date'] = form.order_date.data.strftime('%Y-%m-%d')
+                    order['order_date'] = form.order_date.data.strftime('%Y-%m-%d')  # Ensure correct date format
                 updated_orders.append(order)
             write_pizza_data(updated_orders)
             flash('Order updated successfully!', 'success')
@@ -192,10 +203,13 @@ def edit_order(order_id):
     form.size.data = order_to_edit['size']
     form.quantity.data = order_to_edit['quantity']
     form.price_per.data = order_to_edit['price_per']
-    form.order_date.data = order_to_edit['order_date']
+   
+    try:
+        form.order_date.data = datetime.strptime(order_to_edit['order_date'], '%Y-%m-%d')  
+    except ValueError:
+        form.order_date.data = datetime.strptime(order_to_edit['order_date'], '%Y/%m/%d')  
 
-    return render_template('edit_order.html', form=form)
-
+    return render_template('edit_order.html', form=form, order=order_to_edit)
 if __name__ == '__main__':
     app.run(debug=True, port=8888)
 
