@@ -192,7 +192,7 @@ def edit_order(order_id):
                     order['size'] = form.size.data
                     order['quantity'] = form.quantity.data
                     order['price_per'] = form.price_per.data
-                    order['order_date'] = form.order_date.data.strftime('%Y-%m-%d')  # Ensure correct date format
+                    order['order_date'] = form.order_date.data.strftime('%Y-%m-%d') 
                 updated_orders.append(order)
             write_pizza_data(updated_orders)
             flash('Order updated successfully!', 'success')
