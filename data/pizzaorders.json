@@ -1,0 +1,4 @@
+[
+    {"id": 1, "type": "Regular", "crust": "Thin Crust", "size": "Medium", "quantity": 2, "price_per": 10.99, "order_date": "2023/10/15"},
+    {"id": 2, "type": "Pepperoni", "crust": "Thick Crust", "size": "Large", "quantity": 1, "price_per": 15.99, "order_date": "2023/10/16"}
+]

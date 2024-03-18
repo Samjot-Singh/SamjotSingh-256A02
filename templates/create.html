@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account</title>
+</head>
+<body>
+    <h2>Create Account</h2>
+    <form method="POST">
+        {{ form.csrf_token }}
+        {{ form.email.label }}<br>
+        {{ form.email }}<br>
+        {{ form.password.label }}<br>
+        {{ form.password }}<br>
+        {{ form.confirm_password.label }}<br>
+        {{ form.confirm_password }}<br>
+        {{ form.role.label }}<br>
+        {{ form.role }}<br>
+        {{ form.submit }}<br>
+    </form>
+</body>
+</html>

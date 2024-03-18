@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Pizza</title>
+</head>
+<body>
+    <h2>Order Pizza</h2>
+    {% if 'email' in session %}
+        <a href="{{ url_for('logout') }}">Logout</a>
+        <br><br>
+        <form method="POST">
+            {{ form.csrf_token }}
+            {{ form.type.label }}<br>
+            {{ form.type }}<br>
+            {{ form.crust.label }}<br>
+            {{ form.crust }}<br>
+            {{ form.size.label }}<br>
+            {{ form.size }}<br>
+            {{ form.quantity.label }}<br>
+            {{ form.quantity }}<br>
+            {{ form.price_per.label }}<br>
+            {{ form.price_per }}<br>
+            {{ form.order_date.label }}<br>
+            {{ form.order_date }}<br>
+            {{ form.id }}<br>
+            {{ form.submit }}<br>
+        </form>
+    {% else %}
+        <p>Please login to view this page.</p>
+        <a href="{{ url_for('login') }}">Login</a>
+    {% endif %}
+</body>
+</html>
