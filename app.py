@@ -1,11 +1,20 @@
-# app.py
+"""
+ITAS 256 Web Development II
+Assignment 2 - Web Server
+Samjot Singh
+Topic- Create a functional web server using either the Bottle or Flask python library
 
+Took some help from chatgpt 3.5 for syntax/runtime errors and reformattiing the code.
+Used lab05 Flask server for reference.
+Used https://flask.palletsprojects.com/en/3.0.x/quickstart/ for reference.
+Used https://www.geeksforgeeks.org/how-to-run-a-flask-application/ for reference.
+Used https://www.geeksforgeeks.org/flask-creating-first-simple-application/ for reference.
+"""
 from flask import Flask, render_template, request, redirect, session, url_for, flash
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, RadioField, SelectField, IntegerField, FloatField, DateField, SubmitField, HiddenField
 from wtforms.validators import DataRequired, Email, EqualTo, Length
 import json
-import os
 
 app = Flask(__name__)
 app.secret_key = "Hello there "
